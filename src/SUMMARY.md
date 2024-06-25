@@ -6,14 +6,15 @@
 # Ethers-rs
 - [Install](./evm/install.md)
 
-# sui
+# sui with rust
 - [Install](./sui/install.md)
 
-# rooch
+# rooch with rust
 - [Install](./rooch/install.md)
 
-# solana
+# aptos with rust
+- [Install](./aptos/install.md)
+
+# solana with rust
 - [Start](./solana/start.md)
 
-# aptos
-- [Install](./aptos/install.md)
