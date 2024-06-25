@@ -1,0 +1,24 @@
+[book]
+authors = ["rustweb3"]
+language = "en"
+multilingual = false
+src = "src"
+title = "rustweb3"
+
+[output.html]
+default-theme = "light"
+smart-punctuation = true
+mathjax-support = false
+copy-fonts = true
+additional-css = ["src/assets/user.css"]
+additional-js = ["src/assets/user.js"]
+no-section-label = false
+git-repository-url = "https://github.com/rustweb3/rustweb3.github.io"
+git-repository-icon = "fa-github"
+edit-url-template = "https://github.com/rustweb3/rustweb3.github.io/edit/main/{path}"
+# cname = "myproject.rs"
+input-404 = "not-found.md"
+
+[output.html.fold]
+enable = true
+level = 2
