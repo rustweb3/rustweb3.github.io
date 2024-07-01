@@ -10,11 +10,11 @@
 
 ## 电子书主要结构
 
-1. 使用 rust 进行 **evm** 开发
-2. 使用 rust 进行 **sui** 开发
-3. 使用 rust 进行 **aptos** 开发
-4. 使用 rust 进行 **rooch** 开发
-5. 使用 rust 进行 **solana** 开发
+1. 使用 rust 进行 **solana** 开发
+2. 使用 rust 进行 **evm** 开发
+3. 使用 rust 进行 **sui** 开发
+4. 使用 rust 进行 **aptos** 开发
+5. 使用 rust 进行 **rooch** 开发
 
 
 ## 现有项目:
