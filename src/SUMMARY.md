@@ -4,10 +4,17 @@
 - [What is rustWeb3](./hello.md)
 
 # solana with rust
-- [Start](./solana/start.md)
+- [Native Rust Module](./solana/start.md)
+    - [Connect To Solana](./solana/connect.md)
+    - [Hello World Program](./solana/program.md)
+    - [Call Solana Program](./solana/call_program.md)
+    - [Solana Pda Player](./solana/pda.md)
   
-# Ethers-rs
-- [Install](./evm/install.md)
+# Solana With Evm
+- [Ethers-rs](./evm/ethers-rs.md)
+    - [Connect To Evm Node](./evm/connect-to-evm.md)
+    - [Call Contract](./evm/call-contract.md)
+    - [Compile Contract](./evm/compile-contract.md)
 
 # sui with rust
 - [Install](./sui/install.md)
