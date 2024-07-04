@@ -25,13 +25,42 @@ solana 的通用网络分四种
 其中 Localhost 网络可以通过 `solana-test-validator -r` 启动，启动以后，将在本地监听 8899 的 rpc 端口。
 devnet 和 testnet 为两种不同的测试网络，mainnet 就是主网了，牵扯真金白银的。 所以上主网之前需要在其他的网络测试完整。
 
-网络的操作基本上都是通过 `solana_client::rpc_client::RpcClient` 来完成的。初始化也极为简单: 
+网络的操作基本上都是通过 `solana_client::rpc_client::RpcClient` 来完成的。初始化也极为简单:
 
 ```rust
 let client = RpcClient::new("https://api.devnet.solana.com".to_string());
 ```
 
-一般情况下，你可能需要通过 quicknode 这类第三方 rpc 获得可用性较高的 rpc 节点。 
+一般情况下，你可能需要通过 quicknode 这类第三方 rpc 获得可用性较高的 rpc 节点。
+
+## 账号结构
+
+账号部分操作几种在 `solana_sdk::signature::{Keypair, Signer}` 。
+Keypair 其实就是 ed25519_dalek 的一组 Keypir 密钥对， Signer 是对应的 trait 接口。
+
+生成随机账户:
+
+```rust
+let pair: Keypair = Keypair::new();
+```
+
+导出私钥,导出编码过的 bytes 数据，solana 中一般使用 base58编码。
+
+```rust
+pair.to_base58_string()
+```
+
+打印地址, solana 地址即为公钥，所以，直接打印 pair.pubkey 的 base58编码 即可。
+
+```rust
+pair.pubkey.to_string()
+```
+
+同理的，base58 编码的字节都可以导入，以获得需要操作的账户。同时 私钥的 base58 编码 也可以导入到各个 solana 钱包当中。
+
+```rust
+let a_pair = Keypair::from_base58_string("base58_key");
+```
 
 ## 简单的完整示例
 
