@@ -180,7 +180,88 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="connect"><a class="header" href="#connect">Connect</a></h1>
+                        <h1 id="连接到-solana-网络"><a class="header" href="#连接到-solana-网络">连接到 solana 网络</a></h1>
+<h2 id="安装基本环境"><a class="header" href="#安装基本环境">安装基本环境</a></h2>
+<p>使用 solana 开发程序之前需要一些基础的 sdk，通过 cargo 安装即可。</p>
+<pre><code class="language-shell">cargo add solana-client
+cargo add solana-sdk
+</code></pre>
+<p>随着版本变化，可能安装的版本不一致。</p>
+<h2 id="网络连接"><a class="header" href="#网络连接">网络连接</a></h2>
+<p>solana 的通用网络分四种</p>
+<div class="table-wrapper"><table><thead><tr><th>Environment</th><th>URL</th></tr></thead><tbody>
+<tr><td>Localhost</td><td><code>http://127.0.0.1:8899</code></td></tr>
+<tr><td>Devnet</td><td><code>https://api.devnet.solana.com</code></td></tr>
+<tr><td>Testnet</td><td><code>https://api.testnet.solana.com</code></td></tr>
+<tr><td>Mainnet-Beta</td><td><code>https://api.mainnet-beta.solana.com</code></td></tr>
+</tbody></table>
+</div>
+<p>其中 Localhost 网络可以通过 <code>solana-test-validator -r</code> 启动，启动以后，将在本地监听 8899 的 rpc 端口。
+devnet 和 testnet 为两种不同的测试网络，mainnet 就是主网了，牵扯真金白银的。 所以上主网之前需要在其他的网络测试完整。</p>
+<p>网络的操作基本上都是通过 <code>solana_client::rpc_client::RpcClient</code> 来完成的。初始化也极为简单:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let client = RpcClient::new("https://api.devnet.solana.com".to_string());
+<span class="boring">}</span></code></pre></pre>
+<p>一般情况下，你可能需要通过 quicknode 这类第三方 rpc 获得可用性较高的 rpc 节点。</p>
+<h2 id="简单的完整示例"><a class="header" href="#简单的完整示例">简单的完整示例</a></h2>
+<p>主要完成以下工作:</p>
+<ol>
+<li>产生一个随机账户,打印对应的地址、私钥等信息</li>
+<li>通过 私钥信息重新导入，获取账户</li>
+<li>检查余额，如果余额为 0 ，那么 申请 airdrop （因为环境问题，或者其他的什么问题，可能 airdrop 失败，可以拿本地网络测试)</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust">use {
+    anyhow::{Ok, Result},
+    clap::Parser,
+    log::{debug, error, info, warn},
+    solana_client::rpc_client::RpcClient,
+    solana_playground::{app, cli, jobs},
+    solana_sdk::signature::{Keypair, Signer},
+};
+
+#[tokio::main]
+async fn main() -&gt; Result&lt;()&gt; {
+    app::RunTime::init();
+    let mut runtime = app::RunTime::new();
+    runtime.do_init(app::InitOptions {
+        config_merge_env: true,
+        config_merge_cli: true,
+    });
+    if runtime.cli.name.is_none() &amp;&amp; runtime.cli.command.is_none() {
+        error!("Please input the command");
+        return Err(anyhow::anyhow!("Please input the command"));
+    }
+
+    match runtime.cli.command {
+        Some(cli::Command::Test {}) =&gt; {
+            let client = RpcClient::new("https://api.devnet.solana.com".to_string());
+            let pair: Keypair = Keypair::new();
+            let pubkey = pair.pubkey();
+            warn!("private key is : {}", pair.to_base58_string());
+            info!("solana address is : {}", pubkey.to_string());
+            let a_pair = Keypair::from_base58_string("3a1q7fn3QPex7MkjKFpQcwP8TYUqLyZT6CYUshGRHFPj79Sq67KNJBk9tJSgAVXMNnjfLuUMDCX9epE8DAqTEY6Q");
+            let a_pubkey = a_pair.pubkey();
+            info!("a_pubkey address is  : {}", a_pubkey.to_string());
+            let balance = client.get_balance(&amp;a_pubkey).unwrap();
+            info!("balance is : {}", balance);
+
+            if balance == 0 {
+                let tx = client.request_airdrop(&amp;a_pubkey, 1000000000).unwrap();
+                info!("tx is : {:?}", tx);
+                let balance = client.get_balance(&amp;a_pubkey).unwrap();
+                info!("balance is : {}", balance);
+            }
+        }
+        _ =&gt; {
+            error!("Please input the command");
+            cli::Cli::parse_from(&amp;["rustapp", "--help"]);
+            return Err(anyhow::anyhow!("Please input the command"));
+        }
+    }
+
+    Ok(())
+}</code></pre></pre>
 
                     </main>
 
