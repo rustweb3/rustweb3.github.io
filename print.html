@@ -224,6 +224,15 @@ devnet 和 testnet 为两种不同的测试网络，mainnet 就是主网了，�
 </span>let client = RpcClient::new("https://api.devnet.solana.com".to_string());
 <span class="boring">}</span></code></pre></pre>
 <p>一般情况下，你可能需要通过 quicknode 这类第三方 rpc 获得可用性较高的 rpc 节点。</p>
+<h2 id="网络请求"><a class="header" href="#网络请求">网络请求</a></h2>
+<p>初始化好了客户端就可以发起rpc 请求了。
+大多数网络请求都遵循 solana 的 <a href="https://solana.com/docs/rpc">rpc 文档</a>。</p>
+<p>以下是两个简单的请求，获取 链的版本号和当前区块高度。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>info!("version : {}", client.get_version().unwrap());
+info!("block height  : {}", client.get_block_height().unwrap());
+<span class="boring">}</span></code></pre></pre>
 <h2 id="账号结构"><a class="header" href="#账号结构">账号结构</a></h2>
 <p>账号部分操作几种在 <code>solana_sdk::signature::{Keypair, Signer}</code> 。
 Keypair 其实就是 ed25519_dalek 的一组 Keypir 密钥对， Signer 是对应的 trait 接口。</p>
