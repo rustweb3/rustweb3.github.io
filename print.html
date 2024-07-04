@@ -225,6 +225,29 @@ devnet 和 testnet 为两种不同的测试网络，mainnet 就是主网了，�
 </span>let client = RpcClient::new("https://api.devnet.solana.com".to_string());
 <span class="boring">}</span></code></pre></pre>
 <p>一般情况下，你可能需要通过 quicknode 这类第三方 rpc 获得可用性较高的 rpc 节点。</p>
+<h2 id="账号结构"><a class="header" href="#账号结构">账号结构</a></h2>
+<p>账号部分操作几种在 <code>solana_sdk::signature::{Keypair, Signer}</code> 。
+Keypair 其实就是 ed25519_dalek 的一组 Keypir 密钥对， Signer 是对应的 trait 接口。</p>
+<p>生成随机账户:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let pair: Keypair = Keypair::new();
+<span class="boring">}</span></code></pre></pre>
+<p>导出私钥,导出编码过的 bytes 数据，solana 中一般使用 base58编码。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pair.to_base58_string()
+<span class="boring">}</span></code></pre></pre>
+<p>打印地址, solana 地址即为公钥，所以，直接打印 pair.pubkey 的 base58编码 即可。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pair.pubkey.to_string()
+<span class="boring">}</span></code></pre></pre>
+<p>同理的，base58 编码的字节都可以导入，以获得需要操作的账户。同时 私钥的 base58 编码 也可以导入到各个 solana 钱包当中。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let a_pair = Keypair::from_base58_string("base58_key");
+<span class="boring">}</span></code></pre></pre>
 <h2 id="简单的完整示例"><a class="header" href="#简单的完整示例">简单的完整示例</a></h2>
 <p>主要完成以下工作:</p>
 <ol>
