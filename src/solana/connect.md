@@ -33,6 +33,18 @@ let client = RpcClient::new("https://api.devnet.solana.com".to_string());
 
 一般情况下，你可能需要通过 quicknode 这类第三方 rpc 获得可用性较高的 rpc 节点。
 
+## 网络请求
+
+初始化好了客户端就可以发起rpc 请求了。
+大多数网络请求都遵循 solana 的 [rpc 文档](https://solana.com/docs/rpc)。
+
+以下是两个简单的请求，获取 链的版本号和当前区块高度。
+
+```rust
+info!("version : {}", client.get_version().unwrap());
+info!("block height  : {}", client.get_block_height().unwrap());
+```
+
 ## 账号结构
 
 账号部分操作几种在 `solana_sdk::signature::{Keypair, Signer}` 。
