@@ -197,7 +197,9 @@ cargo add solana-sdk
 </tbody></table>
 </div>
 <p>其中 Localhost 网络可以通过 <code>solana-test-validator -r</code> 启动，启动以后，将在本地监听 8899 的 rpc 端口。
-devnet 和 testnet 为两种不同的测试网络，mainnet 就是主网了，牵扯真金白银的。 所以上主网之前需要在其他的网络测试完整。</p>
+使用之前需要提前安装 <code>solana</code>。</p>
+<p><code>devnet</code> 和 <code>testnet</code> 为两种不同的测试网络。
+<code>mainnet</code> 就是主网了，牵扯真金白银的。 所以上主网之前需要在其他的网络测试完整。</p>
 <p>网络的操作基本上都是通过 <code>solana_client::rpc_client::RpcClient</code> 来完成的。初始化也极为简单:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -236,6 +238,8 @@ Keypair 其实就是 ed25519_dalek 的一组 Keypir 密钥对， Signer 是对�
 </span><span class="boring">fn main() {
 </span>let a_pair = Keypair::from_base58_string("base58_key");
 <span class="boring">}</span></code></pre></pre>
+<h2 id="查询余额及转账"><a class="header" href="#查询余额及转账">查询余额及转账</a></h2>
+<p>通过 <code>rpc</code>接口 get_balance 可以返回余额。</p>
 <h2 id="简单的完整示例"><a class="header" href="#简单的完整示例">简单的完整示例</a></h2>
 <p>主要完成以下工作:</p>
 <ol>

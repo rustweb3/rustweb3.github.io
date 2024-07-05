@@ -217,7 +217,9 @@ cargo add solana-sdk
 </tbody></table>
 </div>
 <p>其中 Localhost 网络可以通过 <code>solana-test-validator -r</code> 启动，启动以后，将在本地监听 8899 的 rpc 端口。
-devnet 和 testnet 为两种不同的测试网络，mainnet 就是主网了，牵扯真金白银的。 所以上主网之前需要在其他的网络测试完整。</p>
+使用之前需要提前安装 <code>solana</code>。</p>
+<p><code>devnet</code> 和 <code>testnet</code> 为两种不同的测试网络。
+<code>mainnet</code> 就是主网了，牵扯真金白银的。 所以上主网之前需要在其他的网络测试完整。</p>
 <p>网络的操作基本上都是通过 <code>solana_client::rpc_client::RpcClient</code> 来完成的。初始化也极为简单:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -256,6 +258,8 @@ Keypair 其实就是 ed25519_dalek 的一组 Keypir 密钥对， Signer 是对�
 </span><span class="boring">fn main() {
 </span>let a_pair = Keypair::from_base58_string("base58_key");
 <span class="boring">}</span></code></pre></pre>
+<h2 id="查询余额及转账"><a class="header" href="#查询余额及转账">查询余额及转账</a></h2>
+<p>通过 <code>rpc</code>接口 get_balance 可以返回余额。</p>
 <h2 id="简单的完整示例"><a class="header" href="#简单的完整示例">简单的完整示例</a></h2>
 <p>主要完成以下工作:</p>
 <ol>
@@ -318,23 +322,30 @@ async fn main() -&gt; Result&lt;()&gt; {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="call-solana-program"><a class="header" href="#call-solana-program">Call Solana Program</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="call-solana-program-1"><a class="header" href="#call-solana-program-1">Call Solana Program</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ethers-rs"><a class="header" href="#ethers-rs">Ethers-rs</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="connect-to-solana"><a class="header" href="#connect-to-solana">Connect To Solana</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="connect-to-evm-rpc-node"><a class="header" href="#connect-to-evm-rpc-node">Connect To Evm RPC node</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="call-contract"><a class="header" href="#call-contract">Call Contract</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="compile-contract"><a class="header" href="#compile-contract">Compile Contract</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="install"><a class="header" href="#install">Install</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-1"><a class="header" href="#chapter-1">Chapter 1</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="aptos-开发基础配置"><a class="header" href="#aptos-开发基础配置">Aptos 开发基础配置</a></h1>
-<p>使用 <code>rust</code> 做 <code>aptos</code> 的开发，相对复杂一些。</p>
-<h2 id="安装配置-cargo-依赖-并打对应的-patch-在项目的-cargotoml-中添加如下的选项"><a class="header" href="#安装配置-cargo-依赖-并打对应的-patch-在项目的-cargotoml-中添加如下的选项">安装配置 cargo 依赖 ，并打对应的 patch， 在项目的 <code>Cargo.toml</code> 中添加如下的选项</a></h2>
+<p>在开始 <code>aptos</code> 开始之前需要安装 sdk。</p>
+<p>aptos 的 sdk 安装相对特殊一些，除了安装 dependencies，还需要打对应的 patch 同时配置独立的编译参数。</p>
+<h2 id="安装配置-cargo-依赖"><a class="header" href="#安装配置-cargo-依赖">安装配置 cargo 依赖</a></h2>
+<p>可以使用 cargo 命令安装:</p>
+<pre><code class="language-shell">cargo add aptos-sdk --git https://github.com/aptos-labs/aptos-core --branch devnet
+</code></pre>
+<p>或者 也可以直接修改 Cargo.toml 文件:</p>
 <pre><code class="language-toml">[dependencies]
 aptos-sdk = { git = "https://github.com/aptos-labs/aptos-core", branch = "devnet" }
- 
-[patch.crates-io]
+</code></pre>
+<p>添加 patch</p>
+<pre><code class="language-toml">[patch.crates-io]
 merlin = { git = "https://github.com/aptos-labs/merlin" }
 x25519-dalek = { git = "https://github.com/aptos-labs/x25519-dalek", branch = "zeroize_v1" }
 </code></pre>
 <p>注意: 因为aptos sdk 依赖了整个的 aptos crates , 所以，第一次安装很慢，情耐心等待。</p>
-<h2 id="配置单独的-build-选项创建-cargoconfigtoml"><a class="header" href="#配置单独的-build-选项创建-cargoconfigtoml">配置单独的 build 选项，创建 .cargo/config.toml</a></h2>
+<h2 id="配置build-选项"><a class="header" href="#配置build-选项">配置build 选项</a></h2>
+<p>编辑 .cargo/config.toml 如果没有，创建一个，添加 build 选项</p>
 <p>写入如下内容:</p>
 <pre><code class="language-toml">[build]
 rustflags = ["--cfg", "tokio_unstable"]

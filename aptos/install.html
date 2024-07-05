@@ -181,17 +181,24 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="aptos-开发基础配置"><a class="header" href="#aptos-开发基础配置">Aptos 开发基础配置</a></h1>
-<p>使用 <code>rust</code> 做 <code>aptos</code> 的开发，相对复杂一些。</p>
-<h2 id="安装配置-cargo-依赖-并打对应的-patch-在项目的-cargotoml-中添加如下的选项"><a class="header" href="#安装配置-cargo-依赖-并打对应的-patch-在项目的-cargotoml-中添加如下的选项">安装配置 cargo 依赖 ，并打对应的 patch， 在项目的 <code>Cargo.toml</code> 中添加如下的选项</a></h2>
+<p>在开始 <code>aptos</code> 开始之前需要安装 sdk。</p>
+<p>aptos 的 sdk 安装相对特殊一些，除了安装 dependencies，还需要打对应的 patch 同时配置独立的编译参数。</p>
+<h2 id="安装配置-cargo-依赖"><a class="header" href="#安装配置-cargo-依赖">安装配置 cargo 依赖</a></h2>
+<p>可以使用 cargo 命令安装:</p>
+<pre><code class="language-shell">cargo add aptos-sdk --git https://github.com/aptos-labs/aptos-core --branch devnet
+</code></pre>
+<p>或者 也可以直接修改 Cargo.toml 文件:</p>
 <pre><code class="language-toml">[dependencies]
 aptos-sdk = { git = "https://github.com/aptos-labs/aptos-core", branch = "devnet" }
- 
-[patch.crates-io]
+</code></pre>
+<p>添加 patch</p>
+<pre><code class="language-toml">[patch.crates-io]
 merlin = { git = "https://github.com/aptos-labs/merlin" }
 x25519-dalek = { git = "https://github.com/aptos-labs/x25519-dalek", branch = "zeroize_v1" }
 </code></pre>
 <p>注意: 因为aptos sdk 依赖了整个的 aptos crates , 所以，第一次安装很慢，情耐心等待。</p>
-<h2 id="配置单独的-build-选项创建-cargoconfigtoml"><a class="header" href="#配置单独的-build-选项创建-cargoconfigtoml">配置单独的 build 选项，创建 .cargo/config.toml</a></h2>
+<h2 id="配置build-选项"><a class="header" href="#配置build-选项">配置build 选项</a></h2>
+<p>编辑 .cargo/config.toml 如果没有，创建一个，添加 build 选项</p>
 <p>写入如下内容:</p>
 <pre><code class="language-toml">[build]
 rustflags = ["--cfg", "tokio_unstable"]
