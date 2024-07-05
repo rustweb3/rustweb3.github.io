@@ -333,7 +333,8 @@ aptos-sdk = { git = "https://github.com/aptos-labs/aptos-core", branch = "devnet
 merlin = { git = "https://github.com/aptos-labs/merlin" }
 x25519-dalek = { git = "https://github.com/aptos-labs/x25519-dalek", branch = "zeroize_v1" }
 </code></pre>
-<p>然后，还需要配置单独的 build 选项，创建 .cargo/config.toml</p>
+<p>注意: 因为aptos sdk 依赖了整个的 aptos crates , 所以，第一次安装很慢，情耐心等待。</p>
+<h2 id="配置单独的-build-选项创建-cargoconfigtoml"><a class="header" href="#配置单独的-build-选项创建-cargoconfigtoml">配置单独的 build 选项，创建 .cargo/config.toml</a></h2>
 <p>写入如下内容:</p>
 <pre><code class="language-toml">[build]
 rustflags = ["--cfg", "tokio_unstable"]
