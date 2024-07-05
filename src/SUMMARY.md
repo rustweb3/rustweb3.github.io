@@ -22,7 +22,8 @@
 # rooch with rust
 - [Install](./rooch/install.md)
 
-# aptos with rust
-- [Install](./aptos/install.md)
+# Aptos with Rust
+- [Aptos Basic]()
+    - [Install & Config](./aptos/install.md)
 
 
