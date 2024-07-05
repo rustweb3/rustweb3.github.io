@@ -13,9 +13,11 @@ merlin = { git = "https://github.com/aptos-labs/merlin" }
 x25519-dalek = { git = "https://github.com/aptos-labs/x25519-dalek", branch = "zeroize_v1" }
 ```
 
-然后，还需要配置单独的 build 选项，创建 .cargo/config.toml
+注意: 因为aptos sdk 依赖了整个的 aptos crates , 所以，第一次安装很慢，情耐心等待。
 
-写入如下内容: 
+## 配置单独的 build 选项，创建 .cargo/config.toml
+
+写入如下内容:
 
 ```toml
 [build]
