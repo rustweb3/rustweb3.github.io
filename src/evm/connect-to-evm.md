@@ -1,1 +1,1 @@
-# Connect To Solana
+# Connect To Evm RPC node 

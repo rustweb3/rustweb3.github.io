@@ -23,7 +23,10 @@ solana 的通用网络分四种
 | Mainnet-Beta| `https://api.mainnet-beta.solana.com`    |
 
 其中 Localhost 网络可以通过 `solana-test-validator -r` 启动，启动以后，将在本地监听 8899 的 rpc 端口。
-devnet 和 testnet 为两种不同的测试网络，mainnet 就是主网了，牵扯真金白银的。 所以上主网之前需要在其他的网络测试完整。
+使用之前需要提前安装 `solana`。
+
+`devnet` 和 `testnet` 为两种不同的测试网络。
+`mainnet` 就是主网了，牵扯真金白银的。 所以上主网之前需要在其他的网络测试完整。
 
 网络的操作基本上都是通过 `solana_client::rpc_client::RpcClient` 来完成的。初始化也极为简单:
 
@@ -73,6 +76,11 @@ pair.pubkey.to_string()
 ```rust
 let a_pair = Keypair::from_base58_string("base58_key");
 ```
+
+## 查询余额及转账
+
+通过 `rpc`接口 get_balance 可以返回余额。
+
 
 ## 简单的完整示例
 
