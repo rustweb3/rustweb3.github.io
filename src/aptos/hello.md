@@ -39,3 +39,22 @@ x25519-dalek = { git = "https://github.com/aptos-labs/x25519-dalek", branch = "z
 [build]
 rustflags = ["--cfg", "tokio_unstable"]
 ```
+
+## Connect To Aptos
+
+Aptos 网络官方提供的RPC 地址被封装在 `aptos_sdk::rest_client::AptosBaseUrl` 中。
+
+网络设置为官方连接，分为以下几种。
+
+| Name    | Fullnode URL                                | Faucet URL                                |
+|---------|---------------------------------------------|-------------------------------------------|
+| Mainnet | `https://fullnode.mainnet.aptoslabs.com`    | N/A                                       |
+| Devnet  | `https://fullnode.devnet.aptoslabs.com`     | `https://faucet.devnet.aptoslabs.com`     |
+| Testnet | `https://fullnode.testnet.aptoslabs.com`    | `https://faucet.testnet.aptoslabs.com`    |
+| Custom  | `Custom URL provided by the user`           | N/A                                       |
+
+通过 `aptos_sdk::rest_client::Client` 提供连接对象，提供 Url 参数。
+
+```rust
+let client = Client::new(AptosBaseUrl::Testnet.to_url());
+```

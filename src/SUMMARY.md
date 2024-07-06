@@ -24,6 +24,6 @@
 
 # Aptos with Rust
 - [Aptos Basic]()
-    - [Install & Config](./aptos/install.md)
+    - [Install & Config](./aptos/hello.md)
 
 
