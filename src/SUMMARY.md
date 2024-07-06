@@ -25,5 +25,6 @@
 # Aptos with Rust
 - [Aptos Basic]()
     - [Install & Config](./aptos/hello.md)
+    - [Connect To Apto](./aptos/connect.md)
 
 
