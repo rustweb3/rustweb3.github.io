@@ -40,7 +40,7 @@ x25519-dalek = { git = "https://github.com/aptos-labs/x25519-dalek", branch = "z
 rustflags = ["--cfg", "tokio_unstable"]
 ```
 
-## Connect To Aptos
+## 连接到 Aptos 网络
 
 Aptos 网络官方提供的RPC 地址被封装在 `aptos_sdk::rest_client::AptosBaseUrl` 中。
 
@@ -58,3 +58,22 @@ Aptos 网络官方提供的RPC 地址被封装在 `aptos_sdk::rest_client::Aptos
 ```rust
 let client = Client::new(AptosBaseUrl::Testnet.to_url());
 ```
+
+client 提供 rpc 信息，其中有几个信息，你会很快用到 
+
+1. 链的ID : `chain_id`
+
+```rust
+let index_info = client.get_index().await?;
+info!("chain_id info: {:?}", index_info.inner().chain_id);
+```
+
+2. 账户 `sequence_number`
+
+```rust
+let sequence = client.get_account(import_account.address()).await?;
+info!("account sequence is : {}",sequence.inner().sequence_number);
+```
+
+这一点 `aptos` 和其他的公链有所区别。如果是新的账户，那么 sequence_number 则无法获取。同时这个账户也无法进行任何的操作。
+解锁办法，往其中发送任意的 apt 激活即可。
