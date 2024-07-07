@@ -140,3 +140,104 @@ match another_resource.inner() {
 这种方法也适用于获取账户的资源对象解析。
 
 ## 发起转账
+
+转账通过 coin_client 的 transfer 操作完成。其中通过 提供 TransferOptions 中的 coin_type 决定转移的 token 种类。
+提供 None 表示转移默认的 Token apt。
+
+```rust
+let to_address = AccountAddress::from_str(
+    &"0x1",
+)
+.unwrap();
+
+let mut transfer_option = TransferOptions::default();
+transfer_option.coin_type =
+    &"0xa8a5e68261a0f198e34deb2c0fd2683244e51dd015b8cb6987efefc61708d76a::Kana::Kana";
+
+let tx = coin_client
+    .transfer(&mut account, to_address, 1, Some(transfer_option))
+    .await?;
+info!("transfer tx : {:?}", tx.hash.to_string());
+```
+拿到交易hash ，并不表示交易完成。
+
+## 等待交易完成
+
+有时候需要等待交易完成再进行下一步的操作。 可以使用 client 的 wait_for_transaction 来完成。
+
+```rust
+client.wait_for_transaction(&tx).await?;
+```
+
+调用过程中包含了一层模拟调用，并将结果的error 也会反馈在返回的结果中，
+
+## 代码示例
+
+以下是一个账户转账操作的完整实例。
+
+
+```rust
+use {
+    anyhow::Result,
+    aptos_sdk::{
+        coin_client::{CoinClient, TransferOptions},
+        rest_client::{AptosBaseUrl, Client},
+        types::{account_address::AccountAddress, LocalAccount},
+    },
+    log::info,
+    std::str::FromStr,
+};
+
+pub async fn runtime_job(_runtime: &crate::app::RunTime) -> Result<()> {
+    let client = Client::new(AptosBaseUrl::Testnet.to_url());
+    let user_private_key = "0xb35ea8e82ec4daebab0892a466396bc5276e9d2fd05bbf9d4c5e3cacb0b90f68";
+    let mut account = LocalAccount::from_private_key(&user_private_key, 0)?;
+    info!("current address : {}", account.address());
+
+    let account_data = client.get_account(account.address()).await?;
+    let current_sequence = account_data.inner().sequence_number;
+    account.set_sequence_number(current_sequence);
+
+    let balance = client.get_account_balance(account.address()).await?;
+    info!("current balance is : {:?}", balance.inner().coin);
+
+    let coin_client = CoinClient::new(&client);
+    let coin_balance = coin_client.get_account_balance(&account.address()).await?;
+    info!("coin balance is : {:?}", coin_balance);
+
+    let another_resource = client
+        .get_account_resource(
+            account.address(),
+            "0x1::coin::CoinStore<0xa8a5e68261a0f198e34deb2c0fd2683244e51dd015b8cb6987efefc61708d76a::Kana::Kana>",
+        )
+        .await?;
+
+    match another_resource.inner() {
+        Some(resource) => {
+            let coin = resource.data.get("coin").unwrap();
+            info!("another resource is : {:?}", coin.get("value"));
+        }
+        None => {
+            info!("another resource is not found");
+        }
+    }
+
+    let to_address = AccountAddress::from_str(
+        &"0x1",
+    )
+    .unwrap();
+
+    let mut transfer_option = TransferOptions::default();
+    transfer_option.coin_type =
+        &"0xa8a5e68261a0f198e34deb2c0fd2683244e51dd015b8cb6987efefc61708d76a::Kana::Kana";
+
+    let tx = coin_client
+        .transfer(&mut account, to_address, 1, Some(transfer_option))
+        .await?;
+    info!("transfer tx : {:?}", tx.hash.to_string());
+    client.wait_for_transaction(&tx).await?;
+
+    Ok(())
+}
+
+```
