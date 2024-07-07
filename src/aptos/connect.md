@@ -83,4 +83,60 @@ info!(
 import_account.set_sequence_number(account_info.inner().sequence_number);
 ```
 
-## 查询余额
+## 获取测试代币
+
+devnet 和  testnet 都包含了水龙头的地址，可以获取测试代币。
+使用水龙头的 Url 和 rest_client 构建一个 FaucetClient ，调用 fund 方法用来申请测试代币。
+
+```rust
+let faucet_url = url::Url::parse("https://faucet.testnet.aptoslabs.com")?;
+let faucet_client = FaucetClient::new_from_rest_client(faucet_url, client.clone());
+let faucet_result = faucet_client
+    .fund(import_account.address(), 100_000_000 * 5)
+    .await?;
+info!("Faucet result: {:?}", faucet_result);
+```
+
+## 获取账户余额
+
+有几种方法获得账户的余额。
+
+1. 使用 client 直接获取
+
+```rust
+let balance = client.get_account_balance(account.address()).await?;
+info!("current balance is : {:?}", balance.inner().coin);
+```
+
+2. 使用 coin_client 获取
+
+```rust
+let coin_client = CoinClient::new(&client);
+let coin_balance = coin_client.get_account_balance(&account.address()).await?;
+info!("coin balance is : {:?}", coin_balance);
+```
+
+3. 更加通用的方式是使用 client.get_account_resource 方法获取。以上的两种方法其实也是使用这种方法获取的。 
+
+```rust
+let another_resource = client
+    .get_account_resource(
+        account.address(),
+        "0x1::coin::CoinStore<0xa8a5e68261a0f198e34deb2c0fd2683244e51dd015b8cb6987efefc61708d76a::Kana::Kana>",
+    )
+    .await?;
+
+match another_resource.inner() {
+    Some(resource) => {
+        let coin = resource.data.get("coin").unwrap();
+        info!("another resource is : {:?}", coin.get("value"));
+    }
+    None => {
+        info!("another resource is not found");
+    }
+}
+```
+
+这种方法也适用于获取账户的资源对象解析。
+
+## 发起转账
