@@ -421,7 +421,61 @@ info!(
 );
 import_account.set_sequence_number(account_info.inner().sequence_number);
 <span class="boring">}</span></code></pre></pre>
-<h2 id="查询余额"><a class="header" href="#查询余额">查询余额</a></h2>
+<h2 id="获取测试代币"><a class="header" href="#获取测试代币">获取测试代币</a></h2>
+<p>devnet 和  testnet 都包含了水龙头的地址，可以获取测试代币。
+使用水龙头的 Url 和 rest_client 构建一个 FaucetClient ，调用 fund 方法用来申请测试代币。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let faucet_url = url::Url::parse("https://faucet.testnet.aptoslabs.com")?;
+let faucet_client = FaucetClient::new_from_rest_client(faucet_url, client.clone());
+let faucet_result = faucet_client
+    .fund(import_account.address(), 100_000_000 * 5)
+    .await?;
+info!("Faucet result: {:?}", faucet_result);
+<span class="boring">}</span></code></pre></pre>
+<h2 id="获取账户余额"><a class="header" href="#获取账户余额">获取账户余额</a></h2>
+<p>有几种方法获得账户的余额。</p>
+<ol>
+<li>使用 client 直接获取</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let balance = client.get_account_balance(account.address()).await?;
+info!("current balance is : {:?}", balance.inner().coin);
+<span class="boring">}</span></code></pre></pre>
+<ol start="2">
+<li>使用 coin_client 获取</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let coin_client = CoinClient::new(&amp;client);
+let coin_balance = coin_client.get_account_balance(&amp;account.address()).await?;
+info!("coin balance is : {:?}", coin_balance);
+<span class="boring">}</span></code></pre></pre>
+<ol start="3">
+<li>更加通用的方式是使用 client.get_account_resource 方法获取。以上的两种方法其实也是使用这种方法获取的。</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let another_resource = client
+    .get_account_resource(
+        account.address(),
+        "0x1::coin::CoinStore&lt;0xa8a5e68261a0f198e34deb2c0fd2683244e51dd015b8cb6987efefc61708d76a::Kana::Kana&gt;",
+    )
+    .await?;
+
+match another_resource.inner() {
+    Some(resource) =&gt; {
+        let coin = resource.data.get("coin").unwrap();
+        info!("another resource is : {:?}", coin.get("value"));
+    }
+    None =&gt; {
+        info!("another resource is not found");
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>这种方法也适用于获取账户的资源对象解析。</p>
+<h2 id="发起转账"><a class="header" href="#发起转账">发起转账</a></h2>
 
                     </main>
 
