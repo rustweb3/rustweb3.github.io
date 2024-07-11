@@ -26,6 +26,6 @@
 - [Aptos Basic]()
     - [Install & Config](./aptos/hello.md)
     - [Connect To Aptos](./aptos/connect.md)
-    - [First Transaction](./aptos/first-dapp.md)
+    - [First Dapp](./aptos/first-dapp.md)
     - [First NFT](./aptos/first-nft.md)
     - [First Coin](./aptos/first-coin.md)
