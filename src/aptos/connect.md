@@ -49,19 +49,23 @@ rand_core = "0.5.1"
 ```
 
 账号操作集中在 `aptos_sdk::types::LocalAccount` 中，这里可以产生一个 signer 对象，可以和 以上的 client 直接发起交易。
-
-产生随机账户,并打印地址,及 私钥：
+产生随机账户,并打印地址。
 
 ```rust
 let mut alice_account = LocalAccount::generate(&mut OsRng);
+info!("Alice account address is : {}", alice_account.address());
+```
+
+## 导出账户
+
+通过 LocalAccount 的 private_key 方法，可以获取到私钥字节序列。然后使用 hex 编码打印导出。就可以供其他的钱包使用。 
+
+```rust
 info!(
     "Alice account private key is : 0x{}",
     hex::encode(alice_account.private_key().to_bytes())
 );
-info!("Alice account address is : {}", alice_account.address());
 ```
-
-其中产生的私钥的 hex 编码，可以用于导入其他的 aptos 钱包，同时也可以通过 LocalAccount 导入，供以后使用。
 
 ## 导入账户
 
