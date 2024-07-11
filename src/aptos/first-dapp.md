@@ -78,3 +78,36 @@ module counter::counter {
 
 }
 ```
+
+以上是这个dapp的智能合约，包含 一个泛型Struct MyCounter, 一个 Event Struct, 三个 entry 函数供外部操作。
+
+按照以下的步骤完成测试合约部署：
+
+1. 初始化
+
+```shell
+aptos init 
+```
+
+根据需要选择不同的网络，然后，输入私钥或者生成一个新的。你将获得你的部署账号。把这个账户写入 合约配置文件的 address 模块
+
+```toml
+[addresses]
+counter = "0x9ce5950565b5cb8d514b09f5ae5afdd0ed75d41bcbb73409bd066378dcd4b7f3"
+```
+
+2. 编译:
+
+```shell
+aptos move compile --package-dir . --skip-fetch-latest-git-deps 
+```
+
+3. 部署
+
+```shell
+aptos move publish --skip-fetch-latest-git-deps
+```
+
+部署完成后，接下来就可以通过 合约的地址来完成调用了。
+
+## 合约调用
