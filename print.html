@@ -391,18 +391,22 @@ info!("account sequence is : {}",sequence.inner().sequence_number);
 <pre><code class="language-toml">rand = "0.7.3"
 rand_core = "0.5.1"
 </code></pre>
-<p>账号操作集中在 <code>aptos_sdk::types::LocalAccount</code> 中，这里可以产生一个 signer 对象，可以和 以上的 client 直接发起交易。</p>
-<p>产生随机账户,并打印地址,及 私钥：</p>
+<p>账号操作集中在 <code>aptos_sdk::types::LocalAccount</code> 中，这里可以产生一个 signer 对象，可以和 以上的 client 直接发起交易。
+产生随机账户,并打印地址。</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let mut alice_account = LocalAccount::generate(&amp;mut OsRng);
-info!(
+info!("Alice account address is : {}", alice_account.address());
+<span class="boring">}</span></code></pre></pre>
+<h2 id="导出账户"><a class="header" href="#导出账户">导出账户</a></h2>
+<p>通过 LocalAccount 的 private_key 方法，可以获取到私钥字节序列。然后使用 hex 编码打印导出。就可以供其他的钱包使用。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>info!(
     "Alice account private key is : 0x{}",
     hex::encode(alice_account.private_key().to_bytes())
 );
-info!("Alice account address is : {}", alice_account.address());
 <span class="boring">}</span></code></pre></pre>
-<p>其中产生的私钥的 hex 编码，可以用于导入其他的 aptos 钱包，同时也可以通过 LocalAccount 导入，供以后使用。</p>
 <h2 id="导入账户"><a class="header" href="#导入账户">导入账户</a></h2>
 <p>通过 <code>LocalAccount::from_private_key</code> 的操作，可以导入账户。但是，导入账户的时候，无法知道用户的 sequence_number。
 所以，需要从链上获取更新一次，供以后使用。</p>
