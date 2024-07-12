@@ -3,9 +3,10 @@
 我们将完成这样一个简单的dapp,并完成合约调用。
 dapp 的逻辑关系是这样的。
 
-1. 用户(address）可以通过合约，mint 一个 Counter 对象。Counter 内部包含了一个数字 value ，一个字符串消息msg，同时锁定了0.1标准的代币。
-2. 用户(address) 可以调用合约修改Counter对象内部的value 的值。
-3. 用户(address) 可以销毁这个Counter对象，并取回其中锁定的代币。
+1. 用户(address）可以通过合约，mint 一个 Counter 对象。
+2. Counter 内部包含了一个数字 value ，一个字符串消息msg，同时锁定了0.1标准的代币。
+3. 用户(address) 可以调用合约修改Counter对象内部的value 的值。
+4. 用户(address) 可以销毁这个Counter对象，并取回其中锁定的代币。
 
 交互过程中，也会产生对应的Event，我们也会通过rust 的rpc 调用来获取。
 
@@ -111,3 +112,4 @@ aptos move publish --skip-fetch-latest-git-deps
 部署完成后，接下来就可以通过 合约的地址来完成调用了。
 
 ## 合约调用
+
