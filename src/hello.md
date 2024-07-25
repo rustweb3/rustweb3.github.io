@@ -15,7 +15,7 @@
 3. 使用 rust 进行 **sui** 开发
 4. 使用 rust 进行 **aptos** 开发
 5. 使用 rust 进行 **rooch** 开发
-
+6. 使用 rust 进行 **bitcoin** 开发
 
 ## 现有项目:
 
