@@ -3,7 +3,7 @@ authors = ["rustweb3"]
 language = "en"
 multilingual = false
 src = "src"
-title = "rustweb3"
+title = "Rust Web3 Cookbook"
 
 [output.html]
 default-theme = "light"
