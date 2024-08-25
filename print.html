@@ -219,11 +219,16 @@
 }</code></pre></pre>
 <p>将字节数组还原成 string 的时候，需要使用 <code>String::from_utf8(msg_x).unwrap()</code> 来还原。
 同时，因为结果的不确定性，所以，会返回一个 Result 类型。</p>
+<h3 id="bcs"><a class="header" href="#bcs">bcs</a></h3>
+<p>bcs 编码是一个二进制编码，可以把一个结构体编码成字节数组。方便数据传递。</p>
+<p>安装 bcs 编码库</p>
+<pre><code class="language-bash">cargo add bcs
+</code></pre>
 <h2 id="hash"><a class="header" href="#hash">hash</a></h2>
 <p>hash 是 web3 中常用的操作，用于将数据转换为固定长度的字节数组。
 一般用来唯一识别数据的完整性。</p>
-<p>简单的 sha hash , 包含: sha256, sha384, sha512 等。
-使用通用的类库 sha2 来实现。</p>
+<h3 id="简单的-sha-hash--包含-sha256-sha384-sha512-等"><a class="header" href="#简单的-sha-hash--包含-sha256-sha384-sha512-等">简单的 sha hash , 包含: sha256, sha384, sha512 等。</a></h3>
+<p>使用通用的类库 sha2 来实现。</p>
 <pre><code class="language-shell">cargo add sha2
 </code></pre>
 <p>其中 sha2 的 crates 中包含 sha256, sha384, sha512 等。
@@ -243,11 +248,22 @@ fn main() {
 <p>计算 Hash 之前，需要生成对应的编码器 ： let mut h = sha2::Sha256::new()， 同时编码器，必须包含 mut 属性。
 然后，将需要计算的数据写入编码器中，最后，调用 finalize 方法，获取计算结果。</p>
 <p><strong>如果 Hash 计算器，需要多次计算。那么，需要先调用 reset 方法，重置编码器。</strong></p>
-<h3 id="bcs"><a class="header" href="#bcs">bcs</a></h3>
-<p>bcs 编码是一个二进制编码，可以把一个结构体编码成字节数组。方便数据传递。</p>
-<p>安装 bcs 编码库</p>
-<pre><code class="language-bash">cargo add bcs
+<h3 id="hmac"><a class="header" href="#hmac">hmac</a></h3>
+<p>在 Sha hash 的基础上，附加一个 key ,除了完成自身的数据完整性以外，还可以添加一层简单的身份认证。
+这种算法，在身份认证方面，也应用较为广泛，数据发送者，与数据传递着、数据接受者之间，可以用一个 key 来做验证。</p>
+<p>安装</p>
+<pre><code class="language-shell">cargo add hmac
 </code></pre>
+<p>计算 hmac hash 的实例:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut hx = hmac::Hmac::&lt;sha2::Sha256&gt;::new_from_slice(b"hello").unwrap();
+hx.update(b"world");
+let b = hx.finalize().into_bytes();
+println!("{}", hex::encode(b));
+<span class="boring">}</span></code></pre></pre>
+<p>指定一个 key , 然后写入数据，通过 finalize 获取对应的字节流。</p>
+<p>hmac 在 后续的 slip10 中被用来生成子账号的秘钥。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="生成助记词"><a class="header" href="#生成助记词">生成助记词</a></h1>
 <p>助记词是 web3 领域分层钱包一个及其重要的概念。
 通过助记词，通过秘钥派生算法，可以完成钱包账户的派生，控制一个助记词，等于控制了钱包中所有的账户。</p>
