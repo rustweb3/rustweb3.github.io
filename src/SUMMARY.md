@@ -4,6 +4,10 @@
 
 - [What is rustWeb3](./hello.md)
 
+# Common Web3
+
+- [bip39](./common/mnemonic.md)
+
 # solana with rust
 
 - [Native Rust Module]()
