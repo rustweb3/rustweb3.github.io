@@ -6,7 +6,9 @@
 
 # Common Web3
 
-- [bip39](./common/mnemonic.md)
+- [Web3 Common]()
+  - [hash & encode](./common/hash_encode.md)
+  - [bip39](./common/mnemonic.md)
 
 # solana with rust
 
