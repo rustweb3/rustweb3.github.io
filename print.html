@@ -204,7 +204,9 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hash--encode"><a class="header" href="#hash--encode">hash &amp; encode</a></h1>
 <h2 id="encode"><a class="header" href="#encode">encode</a></h2>
 <h3 id="hex"><a class="header" href="#hex">hex</a></h3>
-<p>先简单介绍编码，web3 世界中大部分数据操作 (hash,signature) 都是基于字节的。而处理字节数组很不直观。大部分情况下，使用 hex 编码来处理字节数组。</p>
+<p>先简单介绍编码，编码可以把字节流(所有数据都可以是字节形式)显示成可视字符。
+web3 世界中大部分数据操作 (hash,signature) 也是以字节为基础的。
+这就使得，数据的可读性差一些。引入编码，就可以解决这个问题, 其中以 hex 编码居多。</p>
 <p>安装 hex 编码库</p>
 <pre><code class="language-bash">cargo add hex
 </code></pre>
