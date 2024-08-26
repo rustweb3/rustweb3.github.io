@@ -199,10 +199,37 @@
 <p>将字节数组还原成 string 的时候，需要使用 <code>String::from_utf8(msg_x).unwrap()</code> 来还原。
 同时，因为结果的不确定性，所以，会返回一个 Result 类型。</p>
 <h3 id="bcs"><a class="header" href="#bcs">bcs</a></h3>
-<p>bcs 编码是一个二进制编码，可以把一个结构体编码成字节数组。方便数据传递。</p>
+<p>bcs 编码是一个二进制编码，可以把一个 满足要求的 结构体编码成字节数组，同时，也可以将一个字节流反序列化成一个结构体。
+方便数据安全高效的传递，web3 中会用到 bcs 传递参数和返回结果。</p>
 <p>安装 bcs 编码库</p>
 <pre><code class="language-bash">cargo add bcs
+cargo add serde
 </code></pre>
+<pre><pre class="playground"><code class="language-rust">use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+struct Payload {
+    value: u8,
+    enabled: bool,
+    msg: String,
+}
+
+fn main() {
+    let p = Payload {
+        value: 123,
+        enabled: false,
+        msg: "hello world".to_string(),
+    };
+
+    let d = bcs::to_bytes(&amp;p).unwrap();
+    println!("bcs encode {}", hex::encode(&amp;d));
+    let x = bcs::from_bytes::&lt;Payload&gt;(&amp;d).unwrap();
+    println!("value is : {}", x.value);
+}
+
+</code></pre></pre>
+<p>需要序列化的结构体，必须满足 Serialize，需要反序列化的结构体，必须满足 Deserialize 的 trait 。
+可以通过 <code>serde::{Deserialize, Serialize};</code> 的宏来快速实现。</p>
 <h2 id="hash"><a class="header" href="#hash">hash</a></h2>
 <p>hash 是 web3 中常用的操作，用于将数据转换为固定长度的字节数组。
 一般用来唯一识别数据的完整性。</p>
