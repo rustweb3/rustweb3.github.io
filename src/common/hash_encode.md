@@ -30,13 +30,44 @@ fn main() {
 
 ### bcs
 
-bcs 编码是一个二进制编码，可以把一个结构体编码成字节数组。方便数据传递。
+bcs 编码是一个二进制编码，可以把一个 满足要求的 结构体编码成字节数组，同时，也可以将一个字节流反序列化成一个结构体。
+方便数据安全高效的传递，web3 中会用到 bcs 传递参数和返回结果。
 
 安装 bcs 编码库
 
 ```bash
 cargo add bcs
+cargo add serde
 ```
+
+```rust
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+struct Payload {
+    value: u8,
+    enabled: bool,
+    msg: String,
+}
+
+fn main() {
+    let p = Payload {
+        value: 123,
+        enabled: false,
+        msg: "hello world".to_string(),
+    };
+
+    let d = bcs::to_bytes(&p).unwrap();
+    println!("bcs encode {}", hex::encode(&d));
+    let x = bcs::from_bytes::<Payload>(&d).unwrap();
+    println!("value is : {}", x.value);
+}
+
+
+```
+
+需要序列化的结构体，必须满足 Serialize，需要反序列化的结构体，必须满足 Deserialize 的 trait 。
+可以通过 `serde::{Deserialize, Serialize};` 的宏来快速实现。
 
 ## hash
 
