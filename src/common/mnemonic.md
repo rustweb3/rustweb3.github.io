@@ -1,7 +1,8 @@
 # 生成助记词
 
-助记词是 web3 领域分层钱包一个及其重要的概念。
-通过助记词，通过秘钥派生算法，可以完成钱包账户的派生，控制一个助记词，等于控制了钱包中所有的账户。
+聊到 web3，就不得不说一个重要概念： **助记词**。
+通过助记词，通过秘钥派生算法，可以完成钱包子账户的派生。
+完全可以这么说: 控制一个助记词，等于控制了钱包中所有的账户。
 
 助记词一般为一组单词，词库由 BIP39 提供。 单词的长度可以为 12 个，15 个，18 个，21 个，24 个。
 
@@ -17,8 +18,8 @@ rust 中，通过 `bip39` 的 crate 可以完成助记词的生成和使用。�
 同时为了，可以随机生成助记词，需要开启 `rand_core` 的 feature。
 
 ```shell
-cargo install bip39 --features "chinese-simplified rand_core"
-cargo install rand
+cargo add bip39 --features "chinese-simplified rand_core"
+cargo add rand
 ```
 
 ## 生成助记词

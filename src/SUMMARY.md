@@ -7,8 +7,15 @@
 # Common Web3
 
 - [Web3 Common]()
-  - [hash & encode](./common/hash_encode.md)
   - [bip39](./common/mnemonic.md)
+  - [hash & encode](./common/hash_encode.md)
+
+# Bitcoin with rust
+
+- [Bitcoin with Rust]()
+  - [New Bitcoin Address](./bitcoin/addrss.md)
+  - [Query From Bitcoin](./bitcoin/rpc_query.md)
+  - [Send Transaction](./bitcoin/send_tx.md)
 
 # solana with rust
 
@@ -24,13 +31,6 @@
   - [Connect To Evm Node](./evm/connect-to-evm.md)
   - [Call Contract](./evm/call-contract.md)
   - [Compile Contract](./evm/compile-contract.md)
-
-# Bitcoin with rust
-
-- [Bitcoin with Rust]()
-  - [New Bitcoin Address](./bitcoin/addrss.md)
-  - [Query From Bitcoin](./bitcoin/rpc_query.md)
-  - [Send Transaction](./bitcoin/send_tx.md)
 
 # sui with rust
 
