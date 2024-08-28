@@ -8,6 +8,7 @@
 
 - [Web3 Common]()
   - [bip39](./common/mnemonic.md)
+  - [bip32 & bip44 ](./common/bip32.md)
   - [hash & encode](./common/hash_encode.md)
 
 # Bitcoin with rust
