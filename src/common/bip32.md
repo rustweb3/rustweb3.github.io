@@ -1,4 +1,4 @@
-# bip32 & bip44
+# bip32 & bip44 & slip10
 
 通过上一节 bip39 中定义的助记词，我们可以产生一个种子。种子可以派生秘钥，秘钥可以派生地址。
 这样，web3 的分层钱包系统也就建立起来了。
@@ -81,3 +81,51 @@ fn main() {
 - 通过 XPrv::derive_from_path 可以派生出私钥，这部分是一组扩展秘钥，可以转化为各种需要的秘钥格式。实例中 Xprv 是 ExtendedPrivateKey<k256::ecdsa::SigningKey> 类型，所以，可以调用 private_key() 获取私钥。
 - 通过 private_key() 可以获取私钥，通过 verifying_key() 可以获取公钥。
 - 通过公钥，进行 keccak256 哈希运算，获取 evm 地址。
+
+## SLIP10
+
+很多公链（比如 SUI、Aptos、Solana）采用的是 ed25519 算法，原始的 bip32 并没有定义 ed25519 的秘钥派生方式。
+SLIP10 是 BIP32 的改进版，定义了 ed25519 的秘钥派生方式。生成代码逻辑如下:
+
+```rust
+use bip32::DerivationPath;
+use hmac::{Hmac, Mac};
+use sha2::Sha512;
+
+pub fn derive_ed25519_private_key_by_path(seed: &[u8], path: DerivationPath) -> [u8; 32] {
+    let indexes = path
+        .into_iter()
+        .map(|i: bip32::ChildNumber| i.into())
+        .collect::<Vec<_>>();
+    derive_ed25519_private_key(seed, &indexes)
+}
+
+#[allow(non_snake_case)]
+fn derive_ed25519_private_key(seed: &[u8], indexes: &[u32]) -> [u8; 32] {
+    let mut I = hmac_sha512(b"ed25519 seed", &seed);
+    let mut data = [0u8; 37];
+
+    for i in indexes {
+        let hardened_index = 0x80000000 | *i;
+        let Il = &I[0..32];
+        let Ir = &I[32..64];
+
+        data[1..33].copy_from_slice(Il);
+        data[33..37].copy_from_slice(&hardened_index.to_be_bytes());
+
+        //I = HMAC-SHA512(Key = Ir, Data = 0x00 || Il || ser32(i'))
+        I = hmac_sha512(&Ir, &data);
+    }
+
+    I[0..32].try_into().unwrap()
+}
+
+pub fn hmac_sha512(key: &[u8], data: &[u8]) -> [u8; 64] {
+    type HmacSha512 = Hmac<Sha512>;
+    let mut hmac = HmacSha512::new_from_slice(key).expect("HMAC can take key of any size");
+    hmac.update(data);
+    let result = hmac.finalize();
+    result.into_bytes().try_into().unwrap()
+}
+
+```
