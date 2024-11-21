@@ -32,6 +32,20 @@ fn main() {
 }
 ```
 
+## 获取变量的值
+
+获取值，默认的得到的是 string 类型。
+
+```rust
+let api_key = std::env::var("API_KEY").expect("API_KEY must be set");
+```
+
+不过，可以使用 unwrap 的串联，转化数据类型。
+
+```rust
+let ok: bool = env::var("ok").unwrap().parse().unwrap();
+```
+
 ## 使用实例
 
 ```rust
@@ -47,6 +61,9 @@ fn main() {
     // 指定默认值
     let port = std::env::var("PORT").unwrap_or_else(|_| "3000".to_string());
     println!("PORT: {}", port);
+
+    let ok: bool = env::var("ok").unwrap().parse().unwrap();
+    println!("ok -> : {}", ok);
 
 }
 ```
