@@ -7,6 +7,7 @@
 # Common Web3
 
 - [Web3 Common]()
+  - [dotenv](./common/dotenv.md)
   - [bip39](./common/mnemonic.md)
   - [bip32 & bip44 & slip10 ](./common/bip32.md)
   - [hash & encode](./common/hash_encode.md)
