@@ -223,6 +223,17 @@ fn main() {
     dotenv::from_path(path).ok();
 
 }</code></pre></pre>
+<h2 id="获取变量的值"><a class="header" href="#获取变量的值">获取变量的值</a></h2>
+<p>获取值，默认的得到的是 string 类型。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let api_key = std::env::var("API_KEY").expect("API_KEY must be set");
+<span class="boring">}</span></code></pre></pre>
+<p>不过，可以使用 unwrap 的串联，转化数据类型。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let ok: bool = env::var("ok").unwrap().parse().unwrap();
+<span class="boring">}</span></code></pre></pre>
 <h2 id="使用实例"><a class="header" href="#使用实例">使用实例</a></h2>
 <pre><pre class="playground"><code class="language-rust">use dotenv::dotenv;
 
@@ -236,6 +247,9 @@ fn main() {
     // 指定默认值
     let port = std::env::var("PORT").unwrap_or_else(|_| "3000".to_string());
     println!("PORT: {}", port);
+
+    let ok: bool = env::var("ok").unwrap().parse().unwrap();
+    println!("ok -&gt; : {}", ok);
 
 }</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="生成助记词"><a class="header" href="#生成助记词">生成助记词</a></h1>
